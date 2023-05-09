@@ -17,7 +17,6 @@ public class User {
   @Id
   @GeneratedValue
   @UuidGenerator
-  @Column(name = "id")
   private UUID id;
 
   @Column(nullable = false, columnDefinition = "varchar(50)")
