@@ -2,19 +2,20 @@ package com.rest_api.fs14backend.user;
 
 import com.rest_api.fs14backend.exceptions.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
 
-@Controller
-@RequestMapping("/api/v1/users")
+@RestController
+@RequestMapping("/api/users")
 public class UserController {
   @Autowired
   private UserService userService;
 
   @PostMapping
+  @ResponseBody
   public User createUser(@RequestBody User user) {
     return userService.createUser(user);
   }
@@ -25,13 +26,33 @@ public class UserController {
   }
 
   @GetMapping("/{id}")
-  public User findById(@PathVariable UUID id) {
-    System.out.println("Users test before.........");
+  public ResponseEntity<User> findById(@PathVariable UUID id) {
     User user = userService.findById(id);
-System.out.println("Users test");
-    if (user == null) {
+    if (user != null) {
+      return ResponseEntity.ok(user);
+    } else {
       throw new NotFoundException("User not found");
     }
-    return user;
+  }
+
+  @DeleteMapping("/{id}")
+  public ResponseEntity<?> deleteUser(@PathVariable UUID id) {
+    if (userService.findById(id) != null) {
+      userService.deleteUser(id);
+      return ResponseEntity.noContent().build();
+    } else {
+      throw new NotFoundException("User not found");
+    }
+  }
+
+  @PutMapping("/{id}")
+  public ResponseEntity<User> updateUser(@PathVariable UUID id, @RequestBody User user) {
+    User foundUser = userService.findById(id);
+    if (foundUser != null) {
+      User updatedUser = userService.updateUser(id, user);
+      return ResponseEntity.ok(updatedUser);
+    } else {
+      throw new NotFoundException("User not found");
+    }
   }
 }

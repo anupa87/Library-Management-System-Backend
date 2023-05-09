@@ -26,21 +26,16 @@ public class User {
   @Column(nullable = false, columnDefinition = "varchar(50)")
   private String lastName;
 
-  @Column(nullable = false, unique = true, columnDefinition = "varchar(50)")
+  @Column(nullable = false,  columnDefinition = "varchar(50)")
   private String email;
 
   @Column(nullable = false, columnDefinition = "varchar(50)")
   private String password;
 
-  @Enumerated (EnumType.STRING)
-  @Column (nullable = false, columnDefinition = "varchar(50)")
-  private Role role;
-
-  public User(String firstName, String lastName, String email, String password, Role role){
+  public User(String firstName, String lastName, String email, String password){
     this.firstName = firstName;
     this.lastName = lastName;
     this.email = email;
     this.password = password;
-    this.role = role;
   }
 }
