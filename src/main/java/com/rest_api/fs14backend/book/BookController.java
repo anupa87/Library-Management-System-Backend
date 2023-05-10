@@ -19,13 +19,13 @@ public class BookController {
     return bookService.addBook(book);
   }
   @GetMapping
-  public List<Book> findAll() {
-    return bookService.findAll();
+  public List<Book> getAllBooks() {
+    return bookService.getAllBooks();
   }
 
-  @GetMapping("/{id}")
-  public Book findById(@PathVariable UUID id){
-    Book book = bookService.findById(id);
+  @GetMapping("/{bookId}")
+  public Book getBookById(@PathVariable UUID bookId){
+    Book book = bookService.getBookById(bookId);
 
     if(book == null){
       throw new NotFoundException("Book not found");
@@ -33,16 +33,16 @@ public class BookController {
     return book;
   }
 
-  @DeleteMapping("/{id}")
-  public void deleteBook(@PathVariable UUID id) {
-    bookService.deleteBook(id);
+  @DeleteMapping("/{bookId}")
+  public void deleteBook(@PathVariable UUID bookId) {
+    bookService.deleteBook(bookId);
   }
 
-  @PutMapping ("/{id}")
-  public Book updateBook(@PathVariable UUID id, @RequestBody Book book){
-    Book foundBook = bookService.findById(id);
+  @PutMapping ("/{bookId}")
+  public Book updateBook(@PathVariable UUID bookId, @RequestBody Book book){
+    Book foundBook = bookService.getBookById(bookId);
     if(foundBook != null){
-      Book updatedBook = bookService.updateBook(id, book);
+      Book updatedBook = bookService.updateBook(bookId, book);
       return updatedBook;
     } else {
       throw new NotFoundException("Book not found");

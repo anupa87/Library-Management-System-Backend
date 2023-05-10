@@ -12,24 +12,24 @@ public class UserService {
   @Autowired
   UserRepository userRepository;
 
-  public User createUser(User user) {
+  public User addUser(User user) {
     return userRepository.save(user);
   }
 
-  public List<User> findAll() {
+  public List<User> getAllUsers() {
     return userRepository.findAll();
   }
-  public User findById(UUID id) {
-    return userRepository.findById(id).orElseThrow(() -> new NotFoundException("User not found"));
+  public User getUserById(UUID userId) {
+    return userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User not found"));
   }
 
-  public void deleteUser(UUID id) {
-    User foundUser = userRepository.findById(id).orElseThrow(() -> new NotFoundException("User not found"));
+  public void deleteUser(UUID userId) {
+    User foundUser = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User not found"));
     userRepository.delete(foundUser);
   }
 
-  public User updateUser(UUID id, User user) {
-    User foundUser = userRepository.findById(id).orElseThrow(() -> new NotFoundException("User not found"));
+  public User updateUser(UUID userId, User user) {
+    User foundUser = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User not found"));
 
     foundUser.setFirstName(user.getFirstName());
     foundUser.setLastName(user.getLastName());

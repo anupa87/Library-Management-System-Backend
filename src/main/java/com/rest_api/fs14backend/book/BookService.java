@@ -1,6 +1,5 @@
 package com.rest_api.fs14backend.book;
 
-import com.rest_api.fs14backend.author.Author;
 import com.rest_api.fs14backend.exceptions.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,27 +17,27 @@ public class BookService {
     return bookRepository.save(book);
   }
 
-  public List<Book> findAll() {
+  public List<Book> getAllBooks() {
     return bookRepository.findAll();
   }
 
-  public Book findById(UUID id) {
-    return bookRepository.findById(id).orElseThrow(() -> new NotFoundException("book not found"));
+  public Book getBookById(UUID bookId) {
+    return bookRepository.findById(bookId).orElseThrow(() -> new NotFoundException("book not found"));
   }
 
-  public void deleteBook(UUID id) {
-    Book foundBook = bookRepository.findById(id).orElseThrow(() -> new NotFoundException("book not found"));
+  public void deleteBook(UUID bookId) {
+    Book foundBook = bookRepository.findById(bookId).orElseThrow(() -> new NotFoundException("book not found"));
     bookRepository.delete(foundBook);
   }
 
-  public Book updateBook(UUID id, Book book){
-    Book foundBook = bookRepository.findById(id).orElseThrow(()-> new NotFoundException("book not found"));
+  public Book updateBook(UUID bookId, Book book) {
+    Book foundBook = bookRepository.findById(bookId).orElseThrow(() -> new NotFoundException("book not found"));
 
     foundBook.setISBN(book.getISBN());
     foundBook.setTitle(book.getTitle());
     foundBook.setImageURL(book.getImageURL());
     foundBook.setDescription(book.getDescription());
-    foundBook.setAuthor(book.getAuthor());
+    foundBook.setAuthors(book.getAuthors());
     foundBook.setPublisher(book.getPublisher());
     foundBook.setPublishedYear(book.getPublishedYear());
     foundBook.setNumberOfCopies(book.getNumberOfCopies());

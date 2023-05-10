@@ -15,7 +15,7 @@ public class Author {
   @Id
   @UuidGenerator
   @GeneratedValue
-  private UUID id;
+  private UUID authorId;
 
   @Column (name = "fullName")
   private String fullName;

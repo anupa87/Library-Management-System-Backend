@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.UuidGenerator;
 
 import java.util.UUID;
 
@@ -16,8 +15,7 @@ import java.util.UUID;
 public class User {
   @Id
   @GeneratedValue
-  @UuidGenerator
-  private UUID id;
+  private UUID userId;
 
   @Column(nullable = false, columnDefinition = "varchar(50)")
   private String firstName;
@@ -25,16 +23,21 @@ public class User {
   @Column(nullable = false, columnDefinition = "varchar(50)")
   private String lastName;
 
-  @Column(nullable = false,  columnDefinition = "varchar(50)")
+  @Column(unique = true, nullable = false, columnDefinition = "varchar(50)")
   private String email;
 
   @Column(nullable = false, columnDefinition = "varchar(50)")
   private String password;
 
-  public User(String firstName, String lastName, String email, String password){
+  @Enumerated(EnumType.STRING)
+  @Column(nullable = false)
+  private Role role;
+
+  public User(String firstName, String lastName, String email, String password, Role role) {
     this.firstName = firstName;
     this.lastName = lastName;
     this.email = email;
     this.password = password;
+    this.role = role;
   }
 }

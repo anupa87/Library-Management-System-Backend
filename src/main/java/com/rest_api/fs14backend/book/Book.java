@@ -1,12 +1,9 @@
 package com.rest_api.fs14backend.book;
 
 import com.rest_api.fs14backend.author.Author;
-import com.rest_api.fs14backend.category.Category;
 import jakarta.persistence.*;
-import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.UuidGenerator;
 
 import java.util.List;
 import java.util.UUID;
@@ -17,11 +14,11 @@ import java.util.UUID;
 @NoArgsConstructor
 public class Book {
   @Id
-  @UuidGenerator
   @GeneratedValue
-  private UUID id;
+  private UUID bookId;
 
-  @Column(nullable = false)
+  @Column()
+  @GeneratedValue
   private Integer ISBN;
 
   @Column(nullable = false, columnDefinition = "varchar(50)")
@@ -33,8 +30,10 @@ public class Book {
   @Column(nullable = false, columnDefinition = "text")
   private String description;
 
-  @ManyToMany
-  private List<Author> author;
+  @ManyToMany (fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+  @JoinTable(name = "books_author",joinColumns = @JoinColumn(name = "book_id", referencedColumnName = "bookId"),
+          inverseJoinColumns = @JoinColumn(name = "author_id", referencedColumnName = "authorId"))
+  private List<Author> authors;
 
   @Column(nullable = false)
   private String publisher;
@@ -48,15 +47,14 @@ public class Book {
   @Column(nullable = false)
   private Integer availableCopies;
 
-  @ManyToOne(optional = false)
+  @Enumerated(EnumType.STRING)
   private Category category;
 
-  public Book(Integer ISBN, String title, String imageURL, String description, Author author, String publisher, String publishedYear, Integer numberOfCopies, Integer availableCopies, Category category) {
-    this.ISBN = ISBN;
+  public Book(String title, String imageURL, String description, List<Author> authors, String publisher, String publishedYear, Integer numberOfCopies, Integer availableCopies, Category category) {
     this.title = title;
     this.imageURL = imageURL;
     this.description = description;
-    this.author = (List<Author>) author;
+    this.authors = authors;
     this.publisher = publisher;
     this.publishedYear = publishedYear;
     this.numberOfCopies = numberOfCopies;

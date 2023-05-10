@@ -16,18 +16,18 @@ public class UserController {
 
   @PostMapping
   @ResponseBody
-  public User createUser(@RequestBody User user) {
-    return userService.createUser(user);
+  public User addUser(@RequestBody User user) {
+    return userService.addUser(user);
   }
 
   @GetMapping
-  public List<User> findAll() {
-    return userService.findAll();
+  public List<User> getAllUsers() {
+    return userService.getAllUsers();
   }
 
-  @GetMapping("/{id}")
-  public ResponseEntity<User> findById(@PathVariable UUID id) {
-    User user = userService.findById(id);
+  @GetMapping("/{userId}")
+  public ResponseEntity<User> getUserById(@PathVariable UUID userId) {
+    User user = userService.getUserById(userId);
     if (user != null) {
       return ResponseEntity.ok(user);
     } else {
@@ -35,21 +35,21 @@ public class UserController {
     }
   }
 
-  @DeleteMapping("/{id}")
-  public ResponseEntity<?> deleteUser(@PathVariable UUID id) {
-    if (userService.findById(id) != null) {
-      userService.deleteUser(id);
+  @DeleteMapping("/{userId}")
+  public ResponseEntity<?> deleteUser(@PathVariable UUID userId) {
+    if (userService.getUserById(userId) != null) {
+      userService.deleteUser(userId);
       return ResponseEntity.noContent().build();
     } else {
       throw new NotFoundException("User not found");
     }
   }
 
-  @PutMapping("/{id}")
-  public ResponseEntity<User> updateUser(@PathVariable UUID id, @RequestBody User user) {
-    User foundUser = userService.findById(id);
+  @PutMapping("/{userId}")
+  public ResponseEntity<User> updateUser(@PathVariable UUID userId, @RequestBody User user) {
+    User foundUser = userService.getUserById(userId);
     if (foundUser != null) {
-      User updatedUser = userService.updateUser(id, user);
+      User updatedUser = userService.updateUser(userId, user);
       return ResponseEntity.ok(updatedUser);
     } else {
       throw new NotFoundException("User not found");
