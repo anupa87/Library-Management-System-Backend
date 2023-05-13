@@ -1,31 +1,47 @@
 package com.rest_api.fs14backend.user;
 
 import com.rest_api.fs14backend.exceptions.NotFoundException;
+import com.rest_api.fs14backend.utils.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("api/v1")
 public class UserController {
+  @Autowired
+  private AuthenticationManager authenticationManager;
+
   @Autowired
   private UserService userService;
 
-  @PostMapping
-  @ResponseBody
+  @PostMapping("/signup")
+  public User signup(@RequestBody User user) {
+    return userService.signup(user);
+  }
+  @PostMapping ("/login")
+  public String login(@RequestBody AuthRequest authRequest){
+    return userService.login(authRequest);
+
+  }
+
+  @PostMapping("/users")
   public User addUser(@RequestBody User user) {
     return userService.addUser(user);
   }
 
-  @GetMapping
+  @GetMapping("/users")
   public List<User> getAllUsers() {
     return userService.getAllUsers();
   }
 
-  @GetMapping("/{userId}")
+  @GetMapping("/users/{userId}")
   public ResponseEntity<User> getUserById(@PathVariable UUID userId) {
     User user = userService.getUserById(userId);
     if (user != null) {
@@ -35,7 +51,7 @@ public class UserController {
     }
   }
 
-  @DeleteMapping("/{userId}")
+  @DeleteMapping("/users/{userId}")
   public ResponseEntity<?> deleteUser(@PathVariable UUID userId) {
     if (userService.getUserById(userId) != null) {
       userService.deleteUser(userId);
@@ -45,7 +61,7 @@ public class UserController {
     }
   }
 
-  @PutMapping("/{userId}")
+  @PutMapping("/users/{userId}")
   public ResponseEntity<User> updateUser(@PathVariable UUID userId, @RequestBody User user) {
     User foundUser = userService.getUserById(userId);
     if (foundUser != null) {

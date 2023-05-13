@@ -1,5 +1,6 @@
 package com.rest_api.fs14backend.user;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
 import lombok.Data;
@@ -13,24 +14,26 @@ import java.util.UUID;
 @NoArgsConstructor
 
 public class User {
+
   @Id
   @GeneratedValue
   private UUID userId;
 
-  @Column(nullable = false, columnDefinition = "varchar(50)")
+  @Column(nullable = false, columnDefinition = "varchar(250)")
   private String firstName;
 
-  @Column(nullable = false, columnDefinition = "varchar(50)")
+  @Column(nullable = false, columnDefinition = "varchar(250)")
   private String lastName;
 
-  @Column(unique = true, nullable = false, columnDefinition = "varchar(50)")
+  @Column(unique = true, nullable = false, columnDefinition = "varchar(250)")
   private String email;
 
-  @Column(nullable = false, columnDefinition = "varchar(50)")
+  @Column(nullable = false, columnDefinition = "varchar(250)")
+  @JsonProperty (access = JsonProperty.Access.WRITE_ONLY)
   private String password;
 
   @Enumerated(EnumType.STRING)
-  @Column(nullable = false)
+  @Column
   private Role role;
 
   public User(String firstName, String lastName, String email, String password, Role role) {
@@ -39,5 +42,10 @@ public class User {
     this.email = email;
     this.password = password;
     this.role = role;
+  }
+
+  enum Role {
+    USER,
+    ADMIN
   }
 }

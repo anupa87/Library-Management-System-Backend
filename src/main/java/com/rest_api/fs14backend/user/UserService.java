@@ -1,6 +1,10 @@
 package com.rest_api.fs14backend.user;
 
+import com.rest_api.fs14backend.utils.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.rest_api.fs14backend.exceptions.NotFoundException;
 
@@ -12,6 +16,36 @@ public class UserService {
   @Autowired
   UserRepository userRepository;
 
+  @Autowired
+  private AuthenticationManager authenticationManager;
+
+  @Autowired
+  private PasswordEncoder passwordEncoder;
+
+  @Autowired
+  private JwtUtils jwtUtils;
+
+  public User signup(User user) {
+    User newUser = new User(user.getFirstName(), user.getLastName(), user.getEmail(), passwordEncoder.encode(user.getPassword()), user.getRole());
+    userRepository.save(newUser);
+    return newUser;
+  }
+
+  public String login(AuthRequest authRequest){
+    authenticationManager.authenticate(
+            new UsernamePasswordAuthenticationToken(
+                    authRequest.getEmail(),
+                    authRequest.getPassword()
+            )
+    );
+    User user = userRepository.findByEmail(authRequest.getEmail());
+    return jwtUtils.generateToken(user);
+
+  }
+
+  public User save(User user) {
+    return userRepository.save(user);
+  }
   public User addUser(User user) {
     return userRepository.save(user);
   }
