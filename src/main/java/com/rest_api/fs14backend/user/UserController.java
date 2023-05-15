@@ -1,15 +1,13 @@
 package com.rest_api.fs14backend.user;
 
 import com.rest_api.fs14backend.exceptions.NotFoundException;
-import com.rest_api.fs14backend.utils.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -25,10 +23,10 @@ public class UserController {
   public User signup(@RequestBody User user) {
     return userService.signup(user);
   }
-  @PostMapping ("/login")
-  public String login(@RequestBody AuthRequest authRequest){
-    return userService.login(authRequest);
 
+  @PostMapping ("/login")
+  public Map<String, String> login(@RequestBody AuthRequest authRequest){
+    return userService.login(authRequest);
   }
 
   @PostMapping("/users")

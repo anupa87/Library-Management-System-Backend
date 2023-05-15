@@ -7,8 +7,11 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.rest_api.fs14backend.exceptions.NotFoundException;
+import org.springframework.web.bind.annotation.RequestBody;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @Service
@@ -31,7 +34,7 @@ public class UserService {
     return newUser;
   }
 
-  public String login(AuthRequest authRequest){
+  public Map <String, String> login(@RequestBody AuthRequest authRequest){
     authenticationManager.authenticate(
             new UsernamePasswordAuthenticationToken(
                     authRequest.getEmail(),
@@ -39,7 +42,9 @@ public class UserService {
             )
     );
     User user = userRepository.findByEmail(authRequest.getEmail());
-    return jwtUtils.generateToken(user);
+    Map<String, String> token = new HashMap<>();
+    token.put("token", jwtUtils.generateToken(user));
+    return token;
 
   }
 
