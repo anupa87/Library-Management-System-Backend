@@ -23,4 +23,8 @@ public class Author {
   @Column (name = "email")
   private String email;
 
+  public Author(String fullName, String email) {
+    this.fullName = fullName;
+    this.email = email;
+  }
 }

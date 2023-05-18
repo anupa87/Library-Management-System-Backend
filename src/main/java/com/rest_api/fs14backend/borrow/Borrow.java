@@ -18,7 +18,7 @@ public class Borrow {
   @Id
   @GeneratedValue
   @UuidGenerator
-  private UUID id;
+  private UUID borrowId;
 
   @ManyToOne(optional = false)
   @JoinColumn(name = "book_id", referencedColumnName = "bookId")
@@ -26,7 +26,7 @@ public class Borrow {
 
   @ManyToOne(optional = false)
   @JoinColumn(name = "user_id", referencedColumnName = "userId")
-  private User user;
+  private User borrower;
 
   @Column(nullable = false)
   private LocalDate borrowDate;
@@ -34,14 +34,11 @@ public class Borrow {
   @Column(nullable = false)
   private LocalDate returnDate;
 
-  @Column(nullable = false)
-  private String status;
 
-  public Borrow(Book book, User user, LocalDate borrowDate, LocalDate returnDate, String status) {
+  public Borrow(Book book, User borrower, LocalDate borrowDate, LocalDate returnDate) {
     this.book = book;
-    this.user = user;
+    this.borrower = borrower;
     this.borrowDate = borrowDate;
     this.returnDate = returnDate;
-    this.status = status;
   }
 }

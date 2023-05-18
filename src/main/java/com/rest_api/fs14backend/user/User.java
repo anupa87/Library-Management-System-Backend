@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.UuidGenerator;
 
 import java.util.UUID;
 
@@ -17,6 +18,7 @@ public class User {
 
   @Id
   @GeneratedValue
+  @UuidGenerator
   private UUID userId;
 
   @Column(nullable = false, columnDefinition = "varchar(250)")

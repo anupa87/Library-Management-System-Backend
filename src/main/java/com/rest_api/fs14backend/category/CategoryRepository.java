@@ -1,9 +1,10 @@
-package com.rest_api.fs14backend.author;
+package com.rest_api.fs14backend.category;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.UUID;
+
 @Repository
-public interface AuthorRepository extends JpaRepository <Author, UUID> {
+public interface CategoryRepository extends JpaRepository <Category, UUID> {
 }

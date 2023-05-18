@@ -1,11 +1,13 @@
 package com.rest_api.fs14backend.book;
 
 import com.rest_api.fs14backend.author.Author;
+import com.rest_api.fs14backend.category.Category;
 import jakarta.persistence.*;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.UuidGenerator;
 
-import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -15,11 +17,12 @@ import java.util.UUID;
 public class Book {
   @Id
   @GeneratedValue
+  @UuidGenerator
   private UUID bookId;
 
-  @Column()
-  @GeneratedValue
-  private Integer ISBN;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "category_id", nullable = false)
+  private Category category;
 
   @Column(nullable = false, columnDefinition = "varchar(50)")
   private String title;
@@ -30,10 +33,9 @@ public class Book {
   @Column(nullable = false, columnDefinition = "text")
   private String description;
 
-  @ManyToMany (fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-  @JoinTable(name = "books_author",joinColumns = @JoinColumn(name = "book_id", referencedColumnName = "bookId"),
-          inverseJoinColumns = @JoinColumn(name = "author_id", referencedColumnName = "authorId"))
-  private List<Author> authors;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "author_id", nullable = false)
+  private Author author;
 
   @Column(nullable = false)
   private String publisher;
@@ -47,19 +49,16 @@ public class Book {
   @Column(nullable = false)
   private Integer availableCopies;
 
-  @Enumerated(EnumType.STRING)
-  private Category category;
-
-  public Book(String title, String imageURL, String description, List<Author> authors, String publisher, String publishedYear, Integer numberOfCopies, Integer availableCopies, Category category) {
+  public Book( Category category, String title, String imageURL, String description, Author author, String publisher, String publishedYear, Integer numberOfCopies, Integer availableCopies) {
+    this.category = category;
     this.title = title;
     this.imageURL = imageURL;
     this.description = description;
-    this.authors = authors;
+    this.author = author;
     this.publisher = publisher;
     this.publishedYear = publishedYear;
     this.numberOfCopies = numberOfCopies;
     this.availableCopies = availableCopies;
-    this.category = category;
   }
 }
 
