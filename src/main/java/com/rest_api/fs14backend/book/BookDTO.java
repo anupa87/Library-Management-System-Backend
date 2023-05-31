@@ -13,6 +13,5 @@ public class BookDTO {
   private UUID authorId;
   private String publisher;
   private String publishedYear;
-  private Integer numberOfCopies;
-  private Integer availableCopies;
+ private Book.Status status;
 }

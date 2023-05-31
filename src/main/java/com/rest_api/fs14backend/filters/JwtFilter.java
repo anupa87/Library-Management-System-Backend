@@ -1,6 +1,6 @@
 package com.rest_api.fs14backend.filters;
 
-import com.rest_api.fs14backend.user.CustomUserDetailsService;
+import com.rest_api.fs14backend.SecurityConfig.CustomUserDetailsService;
 import com.rest_api.fs14backend.utils.JwtUtils;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

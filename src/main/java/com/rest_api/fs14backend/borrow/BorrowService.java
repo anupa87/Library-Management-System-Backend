@@ -2,9 +2,7 @@ package com.rest_api.fs14backend.borrow;
 
 import com.rest_api.fs14backend.user.User;
 import com.rest_api.fs14backend.book.Book;
-import com.rest_api.fs14backend.book.BookMapper;
 import com.rest_api.fs14backend.book.BookService;
-import com.rest_api.fs14backend.book.BookDTO;
 import com.rest_api.fs14backend.exceptions.NotFoundException;
 import com.rest_api.fs14backend.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +10,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class BorrowService {
@@ -31,8 +31,8 @@ public class BorrowService {
   @Transactional
   public void borrowBook(UUID bookId, UUID userId) {
     Book book = bookService.getBookById(bookId);
-    if (book.getAvailableCopies() > 0) {
-      book.setAvailableCopies(book.getAvailableCopies() - 1);
+    if (book.getStatus() == Book.Status.AVAILABLE) {
+      book.setStatus(Book.Status.BORROWED);
 
       User user = userService.getUserById(userId);
 
@@ -57,7 +57,7 @@ public class BorrowService {
       throw new NotFoundException("Book has already been returned.");
     }
     Book book = borrow.getBook();
-    book.setAvailableCopies(book.getAvailableCopies() + 1);
+    book.setStatus(Book.Status.AVAILABLE);
 
     borrow.setReturnDate(LocalDate.now());
     borrowRepository.save(borrow);
@@ -67,5 +67,12 @@ public class BorrowService {
     Borrow borrow = borrowRepository.findById(borrowId)
             .orElseThrow(() -> new NotFoundException("Borrow record not found."));
     return borrowMapper.toBorrowDTO(borrow);
+  }
+
+  public List<BorrowDTO> getAllBorrows() {
+    List<Borrow> borrows = borrowRepository.findAll();
+    return borrows.stream()
+            .map(borrowMapper::toBorrowDTO)
+            .collect(Collectors.toList());
   }
 }

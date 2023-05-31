@@ -6,6 +6,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import com.rest_api.fs14backend.user.User.Role;
 import com.rest_api.fs14backend.exceptions.NotFoundException;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -45,7 +46,6 @@ public class UserService {
     Map<String, String> token = new HashMap<>();
     token.put("token", jwtUtils.generateToken(user));
     return token;
-
   }
 
   public User save(User user) {
@@ -70,10 +70,14 @@ public class UserService {
   public User updateUser(UUID userId, User user) {
     User foundUser = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User not found"));
 
+    String existingPassword = foundUser.getPassword();
+    Role existingRole = foundUser.getRole();
+
     foundUser.setFirstName(user.getFirstName());
     foundUser.setLastName(user.getLastName());
     foundUser.setEmail(user.getEmail());
-    foundUser.setPassword(user.getPassword());
+    foundUser.setPassword(existingPassword);
+    foundUser.setRole(existingRole);
 
     return userRepository.save(foundUser);
   }

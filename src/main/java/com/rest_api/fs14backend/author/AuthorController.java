@@ -1,6 +1,9 @@
 package com.rest_api.fs14backend.author;
 
+import com.rest_api.fs14backend.exceptions.NotFoundException;
+import com.rest_api.fs14backend.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,9 +31,16 @@ public class AuthorController {
     return authorService.getAuthorById(authorId);
   }
 
+
   @PutMapping("/authors/{authorId}")
-  public Author updateAuthor(@PathVariable UUID authorId, @RequestBody Author author) {
-    return authorService.updateAuthor(authorId, author);
+  public ResponseEntity<Author> updateAuthor(@PathVariable UUID authorId, @RequestBody Author author) {
+    Author foundAuthor = authorService.getAuthorById(authorId);
+    if (foundAuthor != null) {
+      Author updatedAuthor = authorService.updateAuthor(authorId, author);
+      return ResponseEntity.ok(updatedAuthor);
+    } else {
+      throw new NotFoundException("Author not found");
+    }
   }
 
   @DeleteMapping("/authors/{authorId}")

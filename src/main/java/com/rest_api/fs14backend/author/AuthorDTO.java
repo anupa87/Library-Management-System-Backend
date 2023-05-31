@@ -8,4 +8,5 @@ import java.util.UUID;
 public class AuthorDTO {
   private UUID authorId;
   private String fullName;
+  private String email;
 }

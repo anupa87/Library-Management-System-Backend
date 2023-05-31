@@ -41,8 +41,7 @@ public class BookService {
             author,
             bookDTO.getPublisher(),
             bookDTO.getPublishedYear(),
-            bookDTO.getNumberOfCopies(),
-            bookDTO.getAvailableCopies()
+            bookDTO.getStatus()
     );
 
     return bookRepository.save(book);
@@ -72,8 +71,8 @@ public class BookService {
     foundBook.setAuthor(author);
     foundBook.setPublisher(bookDTO.getPublisher());
     foundBook.setPublishedYear(bookDTO.getPublishedYear());
-    foundBook.setNumberOfCopies(bookDTO.getNumberOfCopies());
-    foundBook.setAvailableCopies(bookDTO.getAvailableCopies());
+    foundBook.setStatus(bookDTO.getStatus());
+
 
 
     return bookRepository.save(foundBook);

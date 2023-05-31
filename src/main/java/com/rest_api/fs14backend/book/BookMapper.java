@@ -16,8 +16,7 @@ public class BookMapper {
             author,
             bookDTO.getPublisher(),
             bookDTO.getPublishedYear(),
-            bookDTO.getNumberOfCopies(),
-            bookDTO.getAvailableCopies());
+            bookDTO.getStatus());
   }
 
 }
