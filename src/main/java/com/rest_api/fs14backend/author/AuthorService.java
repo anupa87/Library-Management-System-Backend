@@ -1,5 +1,6 @@
 package com.rest_api.fs14backend.author;
 
+import com.rest_api.fs14backend.book.Book;
 import com.rest_api.fs14backend.exceptions.NotFoundException;
 import com.rest_api.fs14backend.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +34,8 @@ public class AuthorService {
   }
 
   public void deleteAuthor(UUID authorId) {
-    authorRepository.deleteById(authorId);
+    Author foundAuthor = authorRepository.findById(authorId).orElseThrow(() -> new NotFoundException("Author not found"));
+    authorRepository.delete(foundAuthor);
   }
 
   public Author updateAuthor(UUID authorId, Author author) {
