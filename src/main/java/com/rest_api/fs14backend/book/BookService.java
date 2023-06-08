@@ -40,8 +40,7 @@ public class BookService {
             bookDTO.getDescription(),
             author,
             bookDTO.getPublisher(),
-            bookDTO.getPublishedYear(),
-            bookDTO.getStatus()
+            bookDTO.getPublishedYear()
     );
 
     return bookRepository.save(book);
@@ -71,10 +70,6 @@ public class BookService {
     foundBook.setAuthor(author);
     foundBook.setPublisher(bookDTO.getPublisher());
     foundBook.setPublishedYear(bookDTO.getPublishedYear());
-    foundBook.setStatus(bookDTO.getStatus());
-
-
-
     return bookRepository.save(foundBook);
   }
 }
