@@ -43,11 +43,7 @@ public class Book {
   @Column(nullable = false)
   private String publishedYear;
 
-  @Enumerated(EnumType.STRING)
-  @Column(nullable = false)
-  private Status status;
-
-  public Book( Category category, String title, String imageURL, String description, Author author, String publisher, String publishedYear,Status status) {
+  public Book( Category category, String title, String imageURL, String description, Author author, String publisher, String publishedYear) {
     this.category = category;
     this.title = title;
     this.imageURL = imageURL;
@@ -55,12 +51,7 @@ public class Book {
     this.author = author;
     this.publisher = publisher;
     this.publishedYear = publishedYear;
-    this.status = status;
   }
 
-  public enum Status {
-    AVAILABLE,
-    BORROWED
-  }
 }
 
