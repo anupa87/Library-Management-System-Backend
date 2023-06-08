@@ -1,7 +1,6 @@
 package com.rest_api.fs14backend.author;
 
 import com.rest_api.fs14backend.exceptions.NotFoundException;
-import com.rest_api.fs14backend.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
