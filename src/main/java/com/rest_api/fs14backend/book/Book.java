@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.UuidGenerator;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Entity
@@ -41,17 +42,26 @@ public class Book {
   private String publisher;
 
   @Column(nullable = false)
-  private String publishedYear;
+  private LocalDate publishedDate;
 
-  public Book( Category category, String title, String imageURL, String description, Author author, String publisher, String publishedYear) {
+  @Enumerated (EnumType.STRING)
+  @Column (nullable = false)
+  private BookStatus status;
+
+  public Book( Category category, String title, String imageURL, String description, Author author, String publisher, LocalDate publishedDate, BookStatus status) {
     this.category = category;
     this.title = title;
     this.imageURL = imageURL;
     this.description = description;
     this.author = author;
     this.publisher = publisher;
-    this.publishedYear = publishedYear;
+    this.publishedDate = publishedDate;
+    this.status = BookStatus.AVAILABLE;
   }
 
+  public enum BookStatus {
+    AVAILABLE,
+    NOT_AVAILABLE
+  }
 }
 

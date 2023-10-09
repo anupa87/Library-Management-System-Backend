@@ -33,6 +33,8 @@ public class BookService {
     Author author = authorRepository.findById(bookDTO.getAuthorId())
             .orElseThrow(() -> new NotFoundException("Author not found"));
 
+    Book.BookStatus status = bookDTO.getStatus() != null ? bookDTO.getStatus() : Book.BookStatus.AVAILABLE;
+
     Book book = new Book(
             category,
             bookDTO.getTitle(),
@@ -40,7 +42,8 @@ public class BookService {
             bookDTO.getDescription(),
             author,
             bookDTO.getPublisher(),
-            bookDTO.getPublishedYear()
+            bookDTO.getPublishedDate(),
+            status
     );
 
     return bookRepository.save(book);
@@ -69,7 +72,8 @@ public class BookService {
     foundBook.setDescription(bookDTO.getDescription());
     foundBook.setAuthor(author);
     foundBook.setPublisher(bookDTO.getPublisher());
-    foundBook.setPublishedYear(bookDTO.getPublishedYear());
+    foundBook.setPublishedDate(bookDTO.getPublishedDate());
+    foundBook.setStatus(bookDTO.getStatus());
     return bookRepository.save(foundBook);
   }
 }
