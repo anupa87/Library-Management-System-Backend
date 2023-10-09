@@ -35,14 +35,28 @@ public class TransactionService {
     User user = userRepository.findById(userId)
             .orElseThrow(() -> new NotFoundException("User not found"));
 
+    List<Transaction> borrowedTransactions = transactionRepository.findByBookAndStatus(book, Transaction.BorrowStatus.BORROWED);
+
+    // Check if the book is already borrowed
+    if (!borrowedTransactions.isEmpty()) {
+      throw new IllegalStateException("The book is already borrowed.");
+    }
+
+    transactionDTO.setStatus(Transaction.BorrowStatus.BORROWED);
+
     Transaction transaction = new Transaction(
             book,
             user,
-            true,
             transactionDTO.getBorrowedDate(),
-            null
+            null,
+            transactionDTO.getStatus()
     );
-    return transactionRepository.save(transaction);
+    Transaction savedTransaction = transactionRepository.save(transaction);
+    // Update the book status to NOT_AVAILABLE
+    book.setStatus(Book.BookStatus.NOT_AVAILABLE);
+    bookRepository.save(book);
+
+    return savedTransaction;
   }
 
   public List<Transaction> getAllTransactions() {
@@ -58,13 +72,22 @@ public class TransactionService {
     Transaction transaction = transactionRepository.findById(transactionId)
             .orElseThrow(() -> new NotFoundException("Transaction not found"));
 
-    if (!transaction.isBorrowed()) {
-      throw new IllegalStateException("Book is not borrowed");
+    // Check if the book has already been returned
+    if (transaction.getStatus() == Transaction.BorrowStatus.RETURNED) {
+      throw new IllegalStateException("The book has already been returned.");
     }
-    transaction.setBorrowed(false);
+
     LocalDate currentDate = LocalDate.now();
     transaction.setReturnedDate(currentDate);
 
+    // Set the status to RETURNED
+    transaction.setStatus(Transaction.BorrowStatus.RETURNED);
+
     transactionRepository.save(transaction);
+
+    // Update the book status to AVAILABLE
+    Book book = transaction.getBook();
+    book.setStatus(Book.BookStatus.AVAILABLE);
+    bookRepository.save(book);
   }
 }

@@ -30,21 +30,26 @@ public class Transaction {
   @JoinColumn(name = "user_id", nullable = false)
   private User user;
 
-  @Column(name = "is_borrowed", nullable = false)
-  private boolean isBorrowed;
-
   @Column(name = "borrow_date")
   private LocalDate borrowedDate;
 
   @Column(name = "return_date")
   private LocalDate returnedDate;
 
-  public Transaction(Book book, User user, boolean isBorrowed, LocalDate borrowedDate, LocalDate returnedDate) {
+  @Enumerated(EnumType.STRING)
+  @Column(nullable = false)
+  private BorrowStatus status;
+  public Transaction(Book book, User user, LocalDate borrowedDate, LocalDate returnedDate, BorrowStatus status) {
     this.book = book;
     this.user = user;
-    this.isBorrowed = isBorrowed;
     this.borrowedDate = borrowedDate;
     this.returnedDate = returnedDate;
+    this.status = status;
+  }
+
+  public enum BorrowStatus {
+    BORROWED, // The book is available for borrowing
+    RETURNED // The book is not available (currently borrowed)
   }
 
 }

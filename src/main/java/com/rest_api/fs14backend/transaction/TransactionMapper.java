@@ -10,9 +10,8 @@ public class TransactionMapper {
     return new Transaction(
             book,
             user,
-            transactionDTO.isBorrowed(),
             transactionDTO.getBorrowedDate(),
-            transactionDTO.getReturnedDate()
-    );
+            transactionDTO.getReturnedDate(),
+            transactionDTO.getStatus());
   }
 }
